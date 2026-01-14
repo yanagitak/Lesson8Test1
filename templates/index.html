@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>レシピ投稿ミニアプリ</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <h1>🍳 レシピ投稿ミニアプリ</h1>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="post">
+      <h2>新規レシピ追加</h2>
+
+      <label>タイトル（必須）</label>
+      <input
+        type="text"
+        name="title"
+        value="{{ form.title|default('') }}"
+        required />
+
+      <label>所要分数（整数・1以上）</label>
+      <input
+        type="number"
+        name="minutes"
+        min="1"
+        value="{{ form.minutes|default('') }}"
+        required />
+
+      <label>説明（任意）</label>
+      <textarea name="description" rows="3">
+{{ form.description|default('') }}</textarea
+      >
+
+      <button type="submit">投稿</button>
+    </form>
+
+    <h2>レシピ一覧</h2>
+
+    {% for recipe in recipes %}
+    <div class="recipe">
+      <div class="recipe-title">{{ recipe.title }}</div>
+      <div class="meta">
+        {{ recipe.minutes }} 分 / {{ recipe.created_at.strftime("%Y-%m-%d
+        %H:%M") }}
+      </div>
+      {% if recipe.description %}
+      <div>{{ recipe.description }}</div>
+      {% endif %}
+    </div>
+    {% else %}
+    <p>まだレシピがありません。</p>
+    {% endfor %}
+  </body>
+</html>
